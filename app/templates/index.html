@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<script>
+    function myFunction() {
+        var string = "ciao";
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState === XMLHttpRequest.DONE) {
+                document.getElementById("demo").innerHTML = xhttp.responseText;
+            }
+        };
+
+        var host = "http://127.0.0.1:5000/bot/"+string;
+        xhttp.open("POST", host, true);
+        xhttp.send();
+    }
+</script>
+<h1 onclick="myFunction()">ROBO: My name is Robo. I will answer your queries about Chatbots. If you want to exit, type Bye!</h1>
+<p id="demo"> </p>
+
+</body>
+</html>
