@@ -15,7 +15,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 GREETING_INPUTS = ("hello", "hi", "greetings", "sup", "what's up", "hey", "ciao")
 GREETING_RESPONSES = ["hi", "hey", "*nods*", "hi there", "hello", "I am glad! You are talking to me"]
 
-f = open('./app/turing.txt', 'r', errors='ignore')
+f = open('./app/chatbot.txt', 'r', errors='ignore')
 raw = f.read()
 raw = raw.lower()
 sent_tokens = nltk.sent_tokenize(raw)

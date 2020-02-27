@@ -3,26 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Apercu, sans-serif;
+            text-rendering: optimizelegibility;
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            background: -moz-linear-gradient(-45deg, #183850 0, #183850 25%, #192C46 50%, #22254C 75%, #22254C 100%);
+	        background: -webkit-linear-gradient(-45deg, #183850 0, #183850 25%, #192C46 50%, #22254C 75%, #22254C 100%);
+
+            }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            border-radius: 10px;
+            background-color: rgba(25,147,147,0.4);
+        }
+
+        ::-webkit-scrollbar-thumb {
+             border-radius: 10px;
+            background-color: #183850;
+        }
+        .box1, .box2{
+            display: flex;
+            width: 50%;
+            align-items: center;
+            justify-content: center;
+            align-content: center;
+            color: white;
+            flex-direction: column;
+
+        }
+
+        .chatbot{
+            margin: 24px auto 0 auto;
+	        padding: 0 20px 0 0;
+	        list-style: none;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 80%;
+            width: 90%;
+
+        }
+
+        .chatbot ul{
+            display: flex;
+            flex-direction: column;
+            width: 100%
+        }
+
+        .chatbot li{
+            position: relative;
+	        clear: both;
+	        display: inline-block;
+	        padding: 16px 40px 16px 20px;
+	        margin: 0 0 20px 0;
+	        font: 16px/20px 'Noto Sans', sans-serif;
+	        border-radius: 10px;
+            background: #4d1933;
+
+        }
+
+         input{
+            color: #262626;
+            position: relative;
+            width: 75%;
+            background: #495061;
+            padding: 20px 70px 20px 70px;
+            border-top: 1px solid #495061;
+            border-bottom: 1px solid #495061;
+            border-right: none;
+            border-left: none;
+            outline: none;
+            font-weight: 400;
+            font-size: 1.15rem;
+            opacity: 1;
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        .submit{
+            position: absolute;
+            width: 890px;
+            height: 64px;
+            display: flex;
+            flex-direction: row-reverse;
+
+        }
+
+        .submit-button{
+            position: relative;
+            color: white;
+            height: 100%;
+            width: 20%;
+            background-color: rgba(77,25,51, 1);
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-bottom-right-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+            text-align: center;
+            z-index: 17;
+        }
+
+        .user{
+            display: flex;
+            align-items: center;
+            width: 890px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .greetings{
+            height: 100%;
+            margin: 0;
+        }
+
+        .intro{
+            padding: 40px;
+        }
+
+        .logo{
+            display: flex;
+            height: 50%;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+        }
+
+
+
+    </style>
 
 </head>
 <body>
 <script>
-    function myFunction() {
-        var string = "ciao";
+    function myFunction(string) {
+
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (xhttp.readyState === XMLHttpRequest.DONE) {
-                document.getElementById("demo").innerHTML = xhttp.responseText;
+                var reply = xhttp.responseText;
+                var ul = document.getElementById("chat");
+                var li = document.createElement("li");
+                li.appendChild(document.createTextNode(reply));
+                ul.appendChild(li);
+                var listItems = document.querySelectorAll('.chat li');
+                var length = listItems.length;
+                var node = listItems[length-1];
+                console.log(node.textContent);
+                var topPos = node.offsetTop;
+                console.log(topPos);
+                document.getElementById('bot').scrollTop = topPos;
             }
         };
-
         var host = "http://127.0.0.1:5000/bot/"+string;
         xhttp.open("POST", host, true);
         xhttp.send();
     }
 </script>
-<h1 onclick="myFunction()">ROBO: My name is Robo. I will answer your queries about Chatbots. If you want to exit, type Bye!</h1>
-<p id="demo"> </p>
+
+<div class="box1">
+    <div class="greetings">
+        <div class="logo">
+            <img rel="icon" src="{{ url_for('static', filename='img.png') }}" height="400px">
+        </div>
+        <div class="intro"><h1>Wiki-finder is a bot that searches within a Wikipedia page for you.</h1> Choose the wiki page and ask him something, he will read it for you.</div>
+    </div>
+    <p id="demo"> </p>
+</div>
+<div class="box2">
+    <div class="chatbot" id="bot">
+        <ul id="chat" class="chat">
+            <li class="reply">ROBO: My name is Robo. I will answer your queries about Chatbots</li>
+        </ul>
+    </div>
+    <div class="user">
+        <input placeholder="Ask something..." type="text" id="user_type" name="user_type" required >
+        <div class="submit">
+            <div class="submit-button" onclick="myFunction(document.getElementById('user_type').value)">ASK</div>
+        </div>
+    </div>
+</div>
+<script>
+    var input = document.getElementById('user_type');
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            var question = document.getElementById('user_type').value;
+            document.getElementById('user_type').value = "";
+            myFunction(question);
+        }
+    })
+</script>
 
 </body>
 </html>
